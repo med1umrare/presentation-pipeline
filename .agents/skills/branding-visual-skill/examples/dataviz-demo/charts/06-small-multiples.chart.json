@@ -1,0 +1,41 @@
+{
+  "artifactType": "presentation-chart-spec",
+  "contract": "presentation-chart-spec/1.0",
+  "schemaVersion": "1.0",
+  "chartId": "chart-weekly-leads",
+  "slideId": "slide-weekly-leads",
+  "claimIds": [
+    "claim-telegram-growth"
+  ],
+  "type": "small-multiples",
+  "title": "Растёт только Telegram: с 8 до 21 заявки в неделю",
+  "subtitle": "Заявки по неделям, шт., 8 недель пилота, общая шкала",
+  "data": {
+    "location": "data/weekly-leads.csv",
+    "sha256": "71e0bad042bd9b2049b139d08c4d880b3d3665500bfc494c8af8b531c90895af",
+    "sourceIds": [
+      "source-crm-export"
+    ]
+  },
+  "encoding": {
+    "x": "week",
+    "series": "channel",
+    "value": "leads"
+  },
+  "units": {
+    "label": "шт.",
+    "decimals": 0
+  },
+  "highlight": [
+    "Telegram"
+  ],
+  "annotation": "Остальные каналы колеблются в пределах ±2 заявок без тренда.",
+  "dataStatus": "synthetic",
+  "sourceNote": "Демо-данные примера, не реальные показатели",
+  "verifiedNumbers": [
+    {
+      "value": "±2",
+      "note": "Отклонение недельных значений Instagram, сарафана и сайта от их среднего не больше 1,5 заявки — проверено по weekly-leads.csv."
+    }
+  ]
+}

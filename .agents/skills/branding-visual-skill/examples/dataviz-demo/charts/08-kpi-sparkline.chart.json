@@ -1,0 +1,45 @@
+{
+  "artifactType": "presentation-chart-spec",
+  "contract": "presentation-chart-spec/1.0",
+  "schemaVersion": "1.0",
+  "chartId": "chart-monthly-kpi",
+  "slideId": "slide-monthly-kpi",
+  "claimIds": [
+    "claim-june-record"
+  ],
+  "type": "kpi-sparkline",
+  "title": "Июнь — рекорд полугодия: 560 тыс. ₽ выручки и 30 съёмок",
+  "subtitle": "Ключевые показатели по месяцам, январь — июнь 2025",
+  "data": {
+    "location": "data/monthly-kpi.csv",
+    "sha256": "0c1e1bf91d155c1ca609c249a6abe23b8d010084beb65199e3c5eab1d9795b2a",
+    "sourceIds": [
+      "source-accounting"
+    ]
+  },
+  "encoding": {
+    "metric": "metric",
+    "x": "month",
+    "value": "value",
+    "unit": "unit",
+    "derived": [
+      {
+        "name": "Средний чек",
+        "numerator": "Выручка",
+        "denominator": "Съёмки",
+        "unit": "тыс. ₽",
+        "decimals": 1
+      }
+    ]
+  },
+  "units": {
+    "label": "",
+    "decimals": 1
+  },
+  "highlight": [
+    "Выручка",
+    "Съёмки"
+  ],
+  "dataStatus": "synthetic",
+  "sourceNote": "Демо-данные примера, не реальные показатели"
+}

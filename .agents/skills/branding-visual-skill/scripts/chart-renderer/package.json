@@ -1,0 +1,13 @@
+{
+  "name": "presentation-chart-renderer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "presentation-chart-spec/1.0 -> editable PPTX charts",
+  "engines": {
+    "node": ">=18.3"
+  },
+  "dependencies": {
+    "pptxgenjs": "4.0.1"
+  }
+}

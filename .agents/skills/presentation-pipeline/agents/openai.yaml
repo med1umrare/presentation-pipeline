@@ -1,0 +1,6 @@
+interface:
+  display_name: "Создать презентацию поэтапно"
+  short_description: "Пошаговый пайплайн презентации в одном диалоге"
+  default_prompt: "Используй $presentation-pipeline, чтобы провести меня по всем этапам создания презентации в формате вопрос — ответ."
+policy:
+  allow_implicit_invocation: true

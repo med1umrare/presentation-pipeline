@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:presentation-skills:visual-style-brief:1.2",
+  "title": "Visual Style Brief 1.2",
+  "type": "object",
+  "required": ["artifactType", "contract", "schemaVersion", "status", "createdAt", "project", "pipeline", "mode", "format", "styleSentence", "sources", "rules", "controlScreens", "openQuestions", "approval"],
+  "properties": {
+    "artifactType": {"const": "visual-style-brief"},
+    "contract": {"const": "visual-style-brief/1.2"},
+    "schemaVersion": {"const": "1.2"},
+    "status": {"enum": ["draft", "review", "approved"]},
+    "createdAt": {"type": "string", "format": "date"},
+    "project": {"type": "string", "minLength": 1},
+    "pipeline": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {"enum": ["pipeline", "standalone"]},
+        "blueprint": {
+          "type": "object",
+          "required": ["location", "contract", "schemaVersion", "sha256"],
+          "properties": {
+            "location": {"type": "string", "minLength": 1},
+            "contract": {"const": "presentation-blueprint/1.2"},
+            "schemaVersion": {"const": "1.2"},
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"mode": {"const": "pipeline"}}},
+          "then": {"required": ["blueprint"]}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "mode": {"enum": ["own-direction", "client-reading", "reference-synthesis"]},
+    "format": {
+      "type": "object",
+      "required": ["targetFormats", "aspectRatios", "audience", "targetAction"],
+      "properties": {
+        "targetFormats": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+        "aspectRatios": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+        "audience": {"type": "string", "minLength": 1},
+        "targetAction": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "styleSentence": {"type": "string", "minLength": 1},
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["sourceId", "location", "accessedAt", "licenseStatus", "allowedUsage"],
+        "properties": {
+          "sourceId": {"type": "string", "pattern": "^source-[a-z0-9-]+$"},
+          "location": {"type": "string", "minLength": 1},
+          "accessedAt": {"type": "string", "format": "date"},
+          "licenseStatus": {"enum": ["verified", "restricted", "unknown"]},
+          "allowedUsage": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["ruleId", "category", "value", "evidenceStatus", "sourceIds"],
+        "properties": {
+          "ruleId": {"type": "string", "pattern": "^rule-[a-z0-9-]+$"},
+          "category": {"enum": ["color", "typography", "composition", "imagery", "texture", "motion", "constraint"]},
+          "value": {},
+          "evidenceStatus": {"enum": ["Observed", "Confirmed", "Inferred", "Proposed"]},
+          "sourceIds": {"type": "array", "items": {"type": "string", "pattern": "^source-[a-z0-9-]+$"}, "uniqueItems": true}
+        },
+        "additionalProperties": false
+      },
+      "allOf": [
+        {"contains": {"type": "object", "properties": {"category": {"const": "color"}}, "required": ["category"]}},
+        {"contains": {"type": "object", "properties": {"category": {"const": "typography"}}, "required": ["category"]}},
+        {"contains": {"type": "object", "properties": {"category": {"const": "composition"}}, "required": ["category"]}},
+        {"contains": {"type": "object", "properties": {"category": {"const": "imagery"}}, "required": ["category"]}}
+      ]
+    },
+    "controlScreens": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["screenId", "type", "ruleIds", "specification", "expectedResult", "acceptanceCriteria"],
+        "properties": {
+          "screenId": {"type": "string", "pattern": "^screen-[a-z0-9-]+$"},
+          "type": {"enum": ["title", "content", "data", "cta", "quote", "product-demo"]},
+          "ruleIds": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^rule-[a-z0-9-]+$"}, "uniqueItems": true},
+          "specification": {"type": "string", "minLength": 1},
+          "expectedResult": {"type": "string", "minLength": 1},
+          "acceptanceCriteria": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "openQuestions": {"type": "array", "items": {"type": "string"}},
+    "approval": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["approvedBy", "approvedAt", "criteriaPassed"],
+          "properties": {
+            "approvedBy": {"type": "string", "minLength": 1},
+            "approvedAt": {"type": "string", "format": "date-time"},
+            "criteriaPassed": {"const": true}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "approved"}}},
+      "then": {
+        "properties": {
+          "approval": {"type": "object"},
+          "openQuestions": {"maxItems": 0}
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

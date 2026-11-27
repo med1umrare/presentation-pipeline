@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:presentation-skills:presentation-blueprint:1.2",
+  "title": "Presentation Blueprint 1.2",
+  "type": "object",
+  "required": ["artifactType", "contract", "schemaVersion", "status", "createdAt", "language", "decision", "context", "format", "centralThesis", "desiredAction", "claims", "narrativeRoute", "slides", "visualizationMap", "sources", "openIssues", "approval"],
+  "properties": {
+    "artifactType": {"const": "presentation-blueprint"},
+    "contract": {"const": "presentation-blueprint/1.2"},
+    "schemaVersion": {"const": "1.2"},
+    "status": {"enum": ["draft", "review", "approved"]},
+    "createdAt": {"type": "string", "format": "date"},
+    "language": {"type": "string", "minLength": 2},
+    "decision": {
+      "type": "object",
+      "required": ["presentationNeeded", "reason"],
+      "properties": {
+        "presentationNeeded": {"type": "boolean"},
+        "reason": {"type": "string", "minLength": 1},
+        "recommendedHybrid": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "required": ["audience", "situation", "desiredOutcome", "owner", "constraints"],
+      "properties": {
+        "audience": {"type": "string", "minLength": 1},
+        "situation": {"type": "string", "minLength": 1},
+        "desiredOutcome": {"type": "string", "minLength": 1},
+        "owner": {"type": "string", "minLength": 1},
+        "constraints": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "format": {
+      "type": "object",
+      "required": ["primary", "fallback", "reason"],
+      "properties": {
+        "primary": {"type": "string", "minLength": 1},
+        "fallback": {"type": "string"},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "centralThesis": {"type": "string", "minLength": 1},
+    "desiredAction": {"type": "string", "minLength": 1},
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["claimId", "statement", "audienceValue", "evidence", "status", "sourceIds", "verificationOwner"],
+        "properties": {
+          "claimId": {"type": "string", "pattern": "^claim-[a-z0-9-]+$"},
+          "statement": {"type": "string", "minLength": 1},
+          "audienceValue": {"type": "string", "minLength": 1},
+          "evidence": {"type": "string"},
+          "status": {"enum": ["confirmed", "needs-verification", "working-hypothesis", "author-opinion"]},
+          "sourceIds": {"type": "array", "items": {"type": "string", "pattern": "^source-[a-z0-9-]+$"}, "uniqueItems": true},
+          "verificationOwner": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "narrativeRoute": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "slides": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["slideId", "number", "narrativeJob", "mainPoint", "claimIds", "material", "visualForm"],
+        "properties": {
+          "slideId": {"type": "string", "pattern": "^slide-[a-z0-9-]+$"},
+          "number": {"type": "integer", "minimum": 1},
+          "narrativeJob": {"type": "string", "minLength": 1},
+          "mainPoint": {"type": "string", "minLength": 1},
+          "claimIds": {"type": "array", "items": {"type": "string", "pattern": "^claim-[a-z0-9-]+$"}, "uniqueItems": true},
+          "material": {"type": "string"},
+          "visualForm": {"type": "string", "minLength": 1},
+          "speakerNotes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "visualizationMap": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["slideId", "insight", "form", "assets"],
+        "properties": {
+          "slideId": {"type": "string", "pattern": "^slide-[a-z0-9-]+$"},
+          "insight": {"type": "string", "minLength": 1},
+          "form": {"type": "string", "minLength": 1},
+          "assets": {"type": "array", "items": {"type": "string"}},
+          "chartType": {"enum": ["ranked-bar", "waterfall", "variance", "slope", "dumbbell", "small-multiples", "bullet", "kpi-sparkline"]},
+          "datasetIds": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^dataset-[a-z0-9-]+$"}, "uniqueItems": true}
+        },
+        "additionalProperties": false
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sourceId", "location", "verificationStatus"],
+        "properties": {
+          "sourceId": {"type": "string", "pattern": "^source-[a-z0-9-]+$"},
+          "location": {"type": "string", "minLength": 1},
+          "verificationStatus": {"enum": ["verified", "unverified", "not-provided"]},
+          "title": {"type": "string"},
+          "accessedAt": {"type": "string", "format": "date"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "datasets": {
+      "type": "array",
+      "description": "Optional. Tables that charts are built from; fixed before the Blueprint is approved.",
+      "items": {
+        "type": "object",
+        "required": ["datasetId", "location", "description", "dataStatus", "sourceIds"],
+        "properties": {
+          "datasetId": {"type": "string", "pattern": "^dataset-[a-z0-9-]+$"},
+          "location": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 1},
+          "period": {"type": "string"},
+          "dataStatus": {"enum": ["actual", "modelled", "synthetic", "pending"]},
+          "sourceIds": {"type": "array", "items": {"type": "string", "pattern": "^source-[a-z0-9-]+$"}, "uniqueItems": true},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "openIssues": {"type": "array", "items": {"type": "string"}},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "appendix": {"type": "array", "items": {"type": "string"}},
+    "approval": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["approvedBy", "approvedAt", "criteriaPassed"],
+          "properties": {
+            "approvedBy": {"type": "string", "minLength": 1},
+            "approvedAt": {"type": "string", "format": "date-time"},
+            "criteriaPassed": {"const": true}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "A visualization with chartType needs the datasets it is built from.",
+      "properties": {"visualizationMap": {"items": {"if": {"required": ["chartType"]}, "then": {"required": ["datasetIds"]}}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "approved"}}},
+      "then": {
+        "properties": {
+          "approval": {"type": "object"},
+          "openIssues": {"maxItems": 0}
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

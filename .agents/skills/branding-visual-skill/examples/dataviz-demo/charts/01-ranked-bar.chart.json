@@ -1,0 +1,35 @@
+{
+  "artifactType": "presentation-chart-spec",
+  "contract": "presentation-chart-spec/1.0",
+  "schemaVersion": "1.0",
+  "chartId": "chart-lead-channels",
+  "slideId": "slide-lead-channels",
+  "claimIds": [
+    "claim-telegram-leads"
+  ],
+  "type": "ranked-bar",
+  "title": "Telegram дал 38% заявок пилота — больше любого другого канала",
+  "subtitle": "Заявки по каналам, шт., сумма за 8 недель пилота",
+  "data": {
+    "location": "data/weekly-leads.csv",
+    "sha256": "71e0bad042bd9b2049b139d08c4d880b3d3665500bfc494c8af8b531c90895af",
+    "sourceIds": [
+      "source-crm-export"
+    ]
+  },
+  "encoding": {
+    "category": "channel",
+    "value": "leads",
+    "aggregate": "sum"
+  },
+  "units": {
+    "label": "шт.",
+    "decimals": 0
+  },
+  "highlight": [
+    "Telegram"
+  ],
+  "annotation": "111 заявок из 289 пришли из Telegram. Второй канал, Instagram, — 92.",
+  "dataStatus": "synthetic",
+  "sourceNote": "Демо-данные примера, не реальные показатели"
+}

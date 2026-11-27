@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:presentation-skills:visual-dna-manifest:1.2",
+  "title": "Presentation Visual DNA Manifest 1.2",
+  "type": "object",
+  "required": ["artifactType", "contract", "schemaVersion", "status", "createdAt", "owner", "targetFormats", "sourceBrief", "scope", "openIssues", "examples", "approval"],
+  "properties": {
+    "artifactType": {"const": "visual-dna"},
+    "contract": {"const": "presentation-visual-dna/1.2"},
+    "schemaVersion": {"const": "1.2"},
+    "status": {"enum": ["draft", "review", "approved"]},
+    "createdAt": {"type": "string", "format": "date"},
+    "owner": {"type": "string", "minLength": 1},
+    "targetFormats": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "sourceBrief": {
+      "type": "object",
+      "required": ["location", "contract", "schemaVersion", "status", "sha256"],
+      "properties": {
+        "location": {"type": "string", "minLength": 1},
+        "contract": {"const": "visual-style-brief/1.2"},
+        "schemaVersion": {"const": "1.2"},
+        "status": {"enum": ["draft", "review", "approved"]},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "scope": {"type": "string", "minLength": 1},
+    "openIssues": {"type": "array", "items": {"type": "string"}},
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "type", "status", "provenance", "allowedUsage", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "type": {"enum": ["title", "content", "data", "cta", "quote", "product-demo", "other"]},
+          "status": {"enum": ["pending", "review", "approved"]},
+          "provenance": {"type": "string", "minLength": 1},
+          "allowedUsage": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "approval": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["approvedBy", "approvedAt", "criteriaPassed"],
+          "properties": {
+            "approvedBy": {"type": "string", "minLength": 1},
+            "approvedAt": {"type": "string", "format": "date-time"},
+            "criteriaPassed": {"const": true}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "approved"}}},
+      "then": {
+        "properties": {
+          "sourceBrief": {"properties": {"status": {"const": "approved"}}},
+          "openIssues": {"maxItems": 0},
+          "examples": {
+            "minContains": 3,
+            "contains": {"type": "object", "properties": {"status": {"const": "approved"}}, "required": ["status"]}
+          },
+          "approval": {"type": "object"}
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

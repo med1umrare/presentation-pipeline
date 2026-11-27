@@ -1,0 +1,39 @@
+{
+  "artifactType": "presentation-chart-spec",
+  "contract": "presentation-chart-spec/1.0",
+  "schemaVersion": "1.0",
+  "chartId": "chart-kpi-targets",
+  "slideId": "slide-kpi-targets",
+  "claimIds": [
+    "claim-conversion-gap"
+  ],
+  "type": "bullet",
+  "title": "Конверсия 34% при цели 40% — единственный KPI ниже цели",
+  "subtitle": "Факт против цели, %, II квартал 2025; полосы — зоны «слабо / норма / сильно»",
+  "data": {
+    "location": "data/kpi-targets.csv",
+    "sha256": "427f6b36b7f017291749201b5d32debfe242a7136cc441b26a6464f23a34ccd2",
+    "sourceIds": [
+      "source-crm-export"
+    ]
+  },
+  "encoding": {
+    "metric": "metric",
+    "actual": "actual",
+    "target": "target",
+    "poor": "poor",
+    "ok": "ok",
+    "max": "max",
+    "unit": "unit"
+  },
+  "units": {
+    "label": "%",
+    "decimals": 0
+  },
+  "highlight": [
+    "Конверсия заявки в съёмку"
+  ],
+  "annotation": "До цели не хватает 6 п.п. Повторные клиенты и отзывы — выше цели.",
+  "dataStatus": "synthetic",
+  "sourceNote": "Демо-данные примера, не реальные показатели"
+}

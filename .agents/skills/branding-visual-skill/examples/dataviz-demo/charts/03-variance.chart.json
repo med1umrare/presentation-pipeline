@@ -1,0 +1,37 @@
+{
+  "artifactType": "presentation-chart-spec",
+  "contract": "presentation-chart-spec/1.0",
+  "schemaVersion": "1.0",
+  "chartId": "chart-plan-variance",
+  "slideId": "slide-plan-variance",
+  "claimIds": [
+    "claim-april-miss"
+  ],
+  "type": "variance",
+  "title": "Апрель — единственный месяц с отставанием от плана больше 10%",
+  "subtitle": "Отклонение выручки от плана, %, январь — июнь 2025",
+  "data": {
+    "location": "data/plan-variance.csv",
+    "sha256": "3f60d544f2b4abfb120ecae3fb6881195f3989f402abe1946a329cbaac600c7c",
+    "sourceIds": [
+      "source-accounting"
+    ]
+  },
+  "encoding": {
+    "category": "month",
+    "plan": "plan",
+    "actual": "actual",
+    "threshold": -10
+  },
+  "units": {
+    "label": "%",
+    "decimals": 1,
+    "signed": true
+  },
+  "highlight": [
+    "Апр"
+  ],
+  "annotation": "В апреле недобор 49 тыс. ₽: перенесли две свадьбы на май.",
+  "dataStatus": "synthetic",
+  "sourceNote": "Демо-данные примера, не реальные показатели"
+}

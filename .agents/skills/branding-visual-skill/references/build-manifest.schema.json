@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:presentation-skills:presentation-build:1.2",
+  "title": "Presentation Build Manifest 1.2",
+  "type": "object",
+  "required": ["artifactType", "contract", "schemaVersion", "status", "buildMode", "withoutReusableDna", "builderVersion", "createdAt", "inputs", "targetFormats", "outputs", "qa", "reviewBlockers", "approval"],
+  "properties": {
+    "artifactType": {"const": "presentation-build"},
+    "contract": {"const": "presentation-build/1.2"},
+    "schemaVersion": {"const": "1.2"},
+    "status": {"enum": ["draft", "review", "approved"]},
+    "buildMode": {"enum": ["pipeline", "one-off"]},
+    "withoutReusableDna": {"type": "boolean"},
+    "builderVersion": {"type": "string", "minLength": 1},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "inputs": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["type", "location", "contract", "schemaVersion", "sha256"],
+        "properties": {
+          "type": {"enum": ["presentation-blueprint", "visual-dna", "visual-style-brief", "data", "asset", "other"]},
+          "location": {"type": "string", "minLength": 1},
+          "contract": {"type": "string", "minLength": 1},
+          "schemaVersion": {"type": "string", "minLength": 1},
+          "version": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      },
+      "contains": {"type": "object", "properties": {"type": {"const": "presentation-blueprint"}}, "required": ["type"]}
+    },
+    "targetFormats": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "dnaRoleMapping": {"type": "object"},
+    "fontSubstitutions": {"type": "array"},
+    "syntheticData": {"type": "array"},
+    "outputs": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "charts": {
+      "type": "array",
+      "description": "Data charts built from presentation-chart-spec/1.0 files. Optional; when present, qa.data is required.",
+      "items": {
+        "type": "object",
+        "required": ["chartId", "location", "contract", "sha256"],
+        "properties": {
+          "chartId": {"type": "string", "pattern": "^chart-[a-z0-9-]+$"},
+          "location": {"type": "string", "minLength": 1},
+          "contract": {"const": "presentation-chart-spec/1.0"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "qa": {
+      "type": "object",
+      "required": ["semantic", "visual", "technical"],
+      "properties": {
+        "semantic": {"enum": ["pass", "fail", "warning"]},
+        "visual": {"enum": ["pass", "fail", "warning"]},
+        "technical": {"enum": ["pass", "fail", "warning"]},
+        "data": {"enum": ["pass", "fail", "warning"]}
+      },
+      "additionalProperties": false
+    },
+    "reviewBlockers": {"type": "array", "items": {"type": "string"}},
+    "approval": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["approvedBy", "approvedAt", "criteriaPassed"],
+          "properties": {
+            "approvedBy": {"type": "string", "minLength": 1},
+            "approvedAt": {"type": "string", "format": "date-time"},
+            "criteriaPassed": {"const": true}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"buildMode": {"const": "pipeline"}}},
+      "then": {
+        "properties": {
+          "withoutReusableDna": {"const": false},
+          "inputs": {"contains": {"type": "object", "properties": {"type": {"const": "visual-dna"}}, "required": ["type"]}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"buildMode": {"const": "one-off"}}},
+      "then": {
+        "properties": {
+          "withoutReusableDna": {"const": true},
+          "inputs": {"contains": {"type": "object", "properties": {"type": {"const": "visual-style-brief"}}, "required": ["type"]}}
+        }
+      }
+    },
+    {
+      "if": {"required": ["charts"], "properties": {"charts": {"minItems": 1}}},
+      "then": {"properties": {"qa": {"required": ["data"]}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "approved"}}},
+      "then": {
+        "properties": {
+          "qa": {
+            "properties": {
+              "semantic": {"const": "pass"},
+              "visual": {"const": "pass"},
+              "technical": {"const": "pass"},
+              "data": {"const": "pass"}
+            }
+          },
+          "reviewBlockers": {"maxItems": 0},
+          "approval": {"type": "object"}
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

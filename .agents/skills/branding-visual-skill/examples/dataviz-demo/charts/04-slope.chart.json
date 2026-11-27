@@ -1,0 +1,43 @@
+{
+  "artifactType": "presentation-chart-spec",
+  "contract": "presentation-chart-spec/1.0",
+  "schemaVersion": "1.0",
+  "chartId": "chart-avg-check",
+  "slideId": "slide-avg-check",
+  "claimIds": [
+    "claim-brand-check-growth"
+  ],
+  "type": "slope",
+  "title": "Средний чек бренд-съёмки вырос на 37% — быстрее остальных",
+  "subtitle": "Средний чек по типам съёмок, тыс. ₽, 2024 → 2025",
+  "data": {
+    "location": "data/avg-check.csv",
+    "sha256": "0296f6914e093c9c2d44f6f3b3f24b2becb8f70384a9942eaa0b9b43fd0229c7",
+    "sourceIds": [
+      "source-crm-export"
+    ]
+  },
+  "encoding": {
+    "category": "type",
+    "from": "y2024",
+    "to": "y2025",
+    "fromLabel": "2024",
+    "toLabel": "2025"
+  },
+  "units": {
+    "label": "тыс. ₽",
+    "decimals": 0
+  },
+  "highlight": [
+    "Бренд"
+  ],
+  "annotation": "Бренд-съёмка стала вторым по чеку типом после свадьбы и единственным с ростом выше 30%.",
+  "dataStatus": "synthetic",
+  "sourceNote": "Демо-данные примера, не реальные показатели",
+  "verifiedNumbers": [
+    {
+      "value": "30%",
+      "note": "Порог сравнения в тексте, а не значение из данных: у остальных типов рост ниже 30%."
+    }
+  ]
+}

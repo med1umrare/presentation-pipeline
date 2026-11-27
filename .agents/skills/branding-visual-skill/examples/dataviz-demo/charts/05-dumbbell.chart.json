@@ -1,0 +1,38 @@
+{
+  "artifactType": "presentation-chart-spec",
+  "contract": "presentation-chart-spec/1.0",
+  "schemaVersion": "1.0",
+  "chartId": "chart-confirm-time",
+  "slideId": "slide-confirm-time",
+  "claimIds": [
+    "claim-faster-confirmation"
+  ],
+  "type": "dumbbell",
+  "title": "Время подтверждения съёмки сократилось в 3,6–4,3 раза",
+  "subtitle": "Медиана от заявки до подтверждения, часы",
+  "data": {
+    "location": "data/confirm-time.csv",
+    "sha256": "982bbae98e1e9b3417eede8270c3f42ada0c09dbb0f790005d7ecd6f2dcfea6f",
+    "sourceIds": [
+      "source-pilot-log"
+    ]
+  },
+  "encoding": {
+    "category": "type",
+    "from": "before",
+    "to": "after",
+    "fromLabel": "До SnapPlan",
+    "toLabel": "С SnapPlan",
+    "better": "lower"
+  },
+  "units": {
+    "label": "ч",
+    "decimals": 0
+  },
+  "highlight": [
+    "Бренд"
+  ],
+  "annotation": "Бренд-съёмку теперь подтверждают в тот же день: 12 часов вместо двух суток.",
+  "dataStatus": "synthetic",
+  "sourceNote": "Демо-данные примера, не реальные показатели"
+}

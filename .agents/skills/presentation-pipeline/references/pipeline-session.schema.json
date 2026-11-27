@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:presentation-skills:pipeline-session:1.0",
+  "title": "Presentation Pipeline Session 1.0",
+  "type": "object",
+  "required": ["artifactType", "contract", "schemaVersion", "sessionId", "createdAt", "updatedAt", "status", "currentStage", "interactionMode", "projectRoot", "stages", "pendingQuestion", "decisions", "lastValidatedAt"],
+  "properties": {
+    "artifactType": {"const": "presentation-pipeline-session"},
+    "contract": {"const": "presentation-pipeline-session/1.0"},
+    "schemaVersion": {"const": "1.0"},
+    "sessionId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "updatedAt": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["active", "paused", "blocked", "completed"]},
+    "currentStage": {"enum": ["context", "references", "style-kit", "build", "complete"]},
+    "interactionMode": {"enum": ["question-answer", "accelerated"]},
+    "projectRoot": {"type": "string", "minLength": 1},
+    "stages": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/stage"}
+    },
+    "pendingQuestion": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/question"}
+      ]
+    },
+    "decisions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/decision"}
+    },
+    "lastValidatedAt": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "format": "date-time"}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "completed"}}},
+      "then": {"properties": {"currentStage": {"const": "complete"}}}
+    }
+  ],
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "required": ["artifactType", "contract", "schemaVersion", "status", "location", "locationKind", "entrypoint", "sha256"],
+      "properties": {
+        "artifactType": {"type": "string", "minLength": 1},
+        "contract": {"type": "string", "minLength": 1},
+        "schemaVersion": {"type": "string", "minLength": 1},
+        "status": {"enum": ["draft", "review", "approved"]},
+        "location": {"type": "string", "minLength": 1},
+        "locationKind": {"enum": ["file", "directory"]},
+        "entrypoint": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1}
+          ]
+        },
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "skip": {
+      "type": "object",
+      "required": ["requestedAt", "reason", "consequences", "confirmationQuestion", "confirmed", "confirmedBy", "confirmedAt", "replacementArtifact"],
+      "properties": {
+        "requestedAt": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string", "minLength": 1},
+        "consequences": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "confirmationQuestion": {"type": "string", "minLength": 1},
+        "confirmed": {"type": "boolean"},
+        "confirmedBy": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1}
+          ]
+        },
+        "confirmedAt": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "format": "date-time"}
+          ]
+        },
+        "replacementArtifact": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/artifact"}
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "stage": {
+      "type": "object",
+      "required": ["id", "order", "skill", "status", "startedAt", "completedAt", "artifact", "skip"],
+      "properties": {
+        "id": {"enum": ["context", "references", "style-kit", "build"]},
+        "order": {"type": "integer", "minimum": 1, "maximum": 4},
+        "skill": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pending", "active", "review", "approved", "skipped", "blocked"]},
+        "startedAt": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "format": "date-time"}
+          ]
+        },
+        "completedAt": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "format": "date-time"}
+          ]
+        },
+        "artifact": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/artifact"}
+          ]
+        },
+        "skip": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/skip"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "skipped"}}},
+          "then": {
+            "properties": {
+              "skip": {
+                "type": "object",
+                "properties": {
+                  "confirmed": {"const": true},
+                  "confirmedBy": {"type": "string"},
+                  "confirmedAt": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "question": {
+      "type": "object",
+      "required": ["questionId", "stageId", "kind", "text", "why", "required", "askedAt"],
+      "properties": {
+        "questionId": {"type": "string", "pattern": "^question-[a-z0-9-]+$"},
+        "stageId": {"enum": ["context", "references", "style-kit", "build"]},
+        "kind": {"enum": ["intake", "choice", "verification", "approval", "skip-request", "skip-confirmation", "resume"]},
+        "text": {"type": "string", "minLength": 1},
+        "why": {"type": "string"},
+        "required": {"type": "boolean"},
+        "askedAt": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": ["decisionId", "stageId", "questionId", "kind", "answer", "recordedAt"],
+      "properties": {
+        "decisionId": {"type": "string", "pattern": "^decision-[a-z0-9-]+$"},
+        "stageId": {"enum": ["context", "references", "style-kit", "build"]},
+        "questionId": {"type": "string", "pattern": "^question-[a-z0-9-]+$"},
+        "kind": {"enum": ["answer", "approval", "revision", "pause", "skip-request", "skip-confirmation", "resume"]},
+        "answer": {"type": "string", "minLength": 1},
+        "recordedAt": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

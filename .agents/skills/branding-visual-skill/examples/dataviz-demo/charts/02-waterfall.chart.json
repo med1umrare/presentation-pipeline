@@ -1,0 +1,36 @@
+{
+  "artifactType": "presentation-chart-spec",
+  "contract": "presentation-chart-spec/1.0",
+  "schemaVersion": "1.0",
+  "chartId": "chart-revenue-bridge",
+  "slideId": "slide-revenue-bridge",
+  "claimIds": [
+    "claim-revenue-drivers"
+  ],
+  "type": "waterfall",
+  "title": "Бренд-съёмки и портреты дали +1,5 млн ₽ и перекрыли спад свадеб",
+  "subtitle": "Выручка студии, млн ₽, 2024 → 2025, вклад по типам съёмок",
+  "data": {
+    "location": "data/revenue-bridge.csv",
+    "sha256": "a6b18f70c8e46e0a1a1d63c21940b8c975d1c3bad7af6ff41dacb3bdda91a916",
+    "sourceIds": [
+      "source-accounting"
+    ]
+  },
+  "encoding": {
+    "step": "step",
+    "kind": "kind",
+    "value": "value"
+  },
+  "units": {
+    "label": "млн ₽",
+    "decimals": 1
+  },
+  "highlight": [
+    "Портреты",
+    "Бренд-съёмки"
+  ],
+  "annotation": "Без бренд-съёмок рост составил бы 0,5 млн ₽ вместо 1,4.",
+  "dataStatus": "synthetic",
+  "sourceNote": "Демо-данные примера, не реальные показатели"
+}

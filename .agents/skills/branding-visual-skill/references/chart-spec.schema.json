@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:presentation-skills:presentation-chart-spec:1.0",
+  "title": "Presentation Chart Spec 1.0",
+  "description": "One data chart = one file. data.location is relative to the parent of the charts directory (source/ in a presentation build).",
+  "type": "object",
+  "required": ["artifactType", "contract", "schemaVersion", "chartId", "slideId", "claimIds", "type", "title", "subtitle", "data", "units", "dataStatus"],
+  "properties": {
+    "artifactType": {"const": "presentation-chart-spec"},
+    "contract": {"const": "presentation-chart-spec/1.0"},
+    "schemaVersion": {"const": "1.0"},
+    "chartId": {"type": "string", "pattern": "^chart-[a-z0-9-]+$"},
+    "slideId": {"type": "string", "pattern": "^slide-[a-z0-9-]+$"},
+    "claimIds": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^claim-[a-z0-9-]+$"}, "uniqueItems": true},
+    "type": {"enum": ["ranked-bar", "waterfall", "variance", "slope", "dumbbell", "small-multiples", "bullet", "kpi-sparkline"]},
+    "title": {"type": "string", "minLength": 1, "description": "Action title: the measured conclusion, usually with a number."},
+    "subtitle": {"type": "string", "minLength": 1, "description": "Measure, units, period and comparison base."},
+    "data": {
+      "type": "object",
+      "required": ["location", "sha256", "sourceIds"],
+      "properties": {
+        "location": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "sourceIds": {"type": "array", "items": {"type": "string", "pattern": "^source-[a-z0-9-]+$"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    },
+    "encoding": {"type": "object", "description": "Column mapping; required keys depend on type (see chart-catalog.md and validate_chart_spec.py)."},
+    "units": {
+      "type": "object",
+      "required": ["label", "decimals"],
+      "properties": {
+        "label": {"type": "string"},
+        "decimals": {"type": "integer", "minimum": 0, "maximum": 3},
+        "suffix": {"type": "string"},
+        "signed": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "highlight": {"type": "array", "items": {"type": "string"}, "description": "Categories or series that carry the claim."},
+    "annotation": {"type": "string", "description": "One-sentence 'so what' placed next to the evidence."},
+    "dataStatus": {"enum": ["actual", "modelled", "synthetic"]},
+    "sourceNote": {"type": "string"},
+    "verifiedNumbers": {
+      "type": "array",
+      "description": "Numbers in title or annotation that cannot be derived from the data automatically (thresholds, external facts). Each needs a human-readable justification.",
+      "items": {
+        "type": "object",
+        "required": ["value", "note"],
+        "properties": {
+          "value": {"type": "string", "minLength": 1},
+          "note": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"dataStatus": {"enum": ["modelled", "synthetic"]}}},
+      "then": {"required": ["sourceNote"]}
+    }
+  ],
+  "additionalProperties": false
+}

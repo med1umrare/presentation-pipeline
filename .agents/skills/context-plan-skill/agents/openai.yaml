@@ -1,0 +1,6 @@
+interface:
+  display_name: "План презентации"
+  short_description: "Стратегия, тезис и структура презентации"
+  default_prompt: "Используй $context-plan-skill, чтобы превратить мои материалы в проверяемый Presentation Blueprint."
+policy:
+  allow_implicit_invocation: true

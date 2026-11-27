@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:presentation-skills:visual-dna-tokens:1.2",
+  "title": "Presentation Visual DNA Tokens 1.2",
+  "type": "object",
+  "required": ["artifactType", "contract", "schemaVersion", "colors", "typography", "fontSizes", "spacing", "geometry", "formats"],
+  "properties": {
+    "artifactType": {"const": "visual-dna-tokens"},
+    "contract": {"const": "presentation-visual-dna-tokens/1.2"},
+    "schemaVersion": {"const": "1.2"},
+    "colors": {
+      "type": "object",
+      "required": ["background", "surface", "text", "text-muted", "accent", "border"],
+      "properties": {
+        "background": {"type": "string", "minLength": 1},
+        "surface": {"type": "string", "minLength": 1},
+        "text": {"type": "string", "minLength": 1},
+        "text-muted": {"type": "string", "minLength": 1},
+        "accent": {"type": "string", "minLength": 1},
+        "border": {"type": "string", "minLength": 1},
+        "positive": {"type": "string", "minLength": 1},
+        "warning": {"type": "string", "minLength": 1},
+        "negative": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "typography": {
+      "type": "object",
+      "required": ["display", "body", "technical", "fallback"],
+      "properties": {
+        "display": {"type": "string", "minLength": 1},
+        "body": {"type": "string", "minLength": 1},
+        "technical": {"type": "string", "minLength": 1},
+        "fallback": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "fontSizes": {"type": "object", "minProperties": 3, "additionalProperties": {"type": "string", "minLength": 1}},
+    "spacing": {"type": "object", "minProperties": 3, "additionalProperties": {"type": "string", "minLength": 1}},
+    "geometry": {
+      "type": "object",
+      "required": ["radius", "borderWidth", "shadow"],
+      "properties": {
+        "radius": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}},
+        "borderWidth": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}},
+        "shadow": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "formats": {"type": "object", "minProperties": 1},
+    "dataviz": {
+      "type": "object",
+      "description": "Optional data-chart roles used by branding-visual-skill/scripts/chart-renderer. Colors are mirrored in tokens.css as --dataviz-<role>.",
+      "required": ["colors", "sizesPt", "strokePt", "numberFormat"],
+      "properties": {
+        "colors": {
+          "type": "object",
+          "required": ["focus", "focus-soft", "context", "context-strong", "negative", "negative-soft", "grid", "axis"],
+          "propertyNames": {"enum": ["focus", "focus-soft", "context", "context-strong", "negative", "negative-soft", "grid", "axis", "band-poor", "band-ok", "band-good"]},
+          "additionalProperties": {"type": "string", "pattern": "^#[0-9A-Fa-f]{6}$"}
+        },
+        "sizesPt": {
+          "type": "object",
+          "required": ["title", "subtitle", "axis", "data-label", "annotation", "metric", "source", "meta"],
+          "additionalProperties": {"type": "number", "exclusiveMinimum": 0}
+        },
+        "strokePt": {
+          "type": "object",
+          "required": ["line", "line-context", "grid"],
+          "additionalProperties": {"type": "number", "exclusiveMinimum": 0}
+        },
+        "numberFormat": {
+          "type": "object",
+          "required": ["locale", "thousandsSeparator", "decimalSeparator", "minusSign"],
+          "properties": {
+            "locale": {"type": "string", "minLength": 2},
+            "thousandsSeparator": {"type": "string"},
+            "decimalSeparator": {"type": "string", "minLength": 1},
+            "minusSign": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

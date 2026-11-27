@@ -1,0 +1,6 @@
+interface:
+  display_name: "Упаковать утвержденный стиль"
+  short_description: "Создание переносимого Visual DNA-пакета"
+  default_prompt: "Используй $presentation-style-kit, чтобы упаковать утверждённый стиль в проверяемый Visual DNA-пакет."
+policy:
+  allow_implicit_invocation: true

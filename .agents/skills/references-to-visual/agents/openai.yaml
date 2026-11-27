@@ -1,0 +1,6 @@
+interface:
+  display_name: "Анализ визуальных референсов"
+  short_description: "Референсы в проверяемые правила стиля"
+  default_prompt: "Используй $references-to-visual, чтобы разобрать мои референсы и собрать Visual Style Brief."
+policy:
+  allow_implicit_invocation: true

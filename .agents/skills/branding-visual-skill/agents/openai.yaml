@@ -1,0 +1,6 @@
+interface:
+  display_name: "Сборка презентации"
+  short_description: "Сборка, экспорт, рендеры и QA"
+  default_prompt: "Используй $branding-visual-skill, чтобы собрать презентацию из Blueprint и Visual DNA и проверить результат."
+policy:
+  allow_implicit_invocation: true
